@@ -1,17 +1,17 @@
-extern crate skim;
-extern crate globwalk;
 extern crate dirs;
+extern crate globwalk;
+extern crate skim;
+use serde::Deserialize;
+use serde_json;
 use skim::prelude::*;
 use std::error::Error;
-use serde::{Deserialize};
-use serde_json;
 use std::fs::File;
 use std::io::BufReader;
 use std::path::Path;
 
 #[derive(Deserialize, Debug)]
 struct Pkg {
-    name: String
+    name: String,
 }
 
 fn read_pkg_from_file<P: AsRef<Path>>(path: P) -> Result<String, Box<dyn Error>> {
@@ -25,7 +25,7 @@ fn read_pkg_from_file<P: AsRef<Path>>(path: P) -> Result<String, Box<dyn Error>>
 
 struct PkgItem {
     text: String,
-    output: String
+    output: String,
 }
 
 impl SkimItem for PkgItem {
@@ -36,13 +36,10 @@ impl SkimItem for PkgItem {
     fn output(&self) -> Cow<str> {
         Cow::Borrowed(&self.output)
     }
-    
 }
 
 pub fn main() {
-    let options = SkimOptionsBuilder::default()
-        .build()
-        .unwrap();
+    let options = SkimOptionsBuilder::default().build().unwrap();
 
     let (tx, rx): (SkimItemSender, SkimItemReceiver) = unbounded();
 
@@ -60,10 +57,14 @@ pub fn main() {
     for img in walker {
         let name = read_pkg_from_file(img.path());
         match name {
-            Ok(n) => tx.send(Arc::new(PkgItem { text: n, output: format!("{}", img.path().display()) })).unwrap(),
+            Ok(n) => tx
+                .send(Arc::new(PkgItem {
+                    text: n,
+                    output: format!("{}", img.path().display()),
+                }))
+                .unwrap(),
             Err(_) => {}
         }
-        
     }
 
     let selected_items = Skim::run_with(&options, Some(rx))
