@@ -6,7 +6,7 @@ use serde_json;
 use skim::prelude::*;
 use std::error::Error;
 use std::fs::File;
-use std::io::BufReader;
+use std::io::{BufReader};
 use std::path::Path;
 
 #[derive(Deserialize, Debug)]
@@ -45,7 +45,7 @@ pub fn main() {
 
     let walker = globwalk::GlobWalkerBuilder::from_patterns(
         dirs::home_dir().unwrap(),
-        &["**/Projects/**/package.json", "!node_modules", "!.*"],
+        &["**/package.json", "!node_modules", "!.*"],
     )
     .max_depth(4)
     .follow_links(true)
@@ -72,6 +72,8 @@ pub fn main() {
         .unwrap_or_else(|| Vec::new());
 
     for item in selected_items.iter() {
-        print!("{}{}", item.output(), "\n");
+        let path = format!("{}", item.output());
+        let dir = Path::new(&path).parent().unwrap();
+        println!("{}", dir.display())
     }
 }
