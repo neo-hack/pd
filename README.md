@@ -12,3 +12,9 @@
 ```console
 pd
 ```
+
+**how to cd after found package**
+
+```bash
+cd "$(pd)"
+```
