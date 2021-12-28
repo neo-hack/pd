@@ -2,11 +2,10 @@ extern crate dirs;
 extern crate globwalk;
 extern crate skim;
 use serde::Deserialize;
-use serde_json;
 use skim::prelude::*;
 use std::error::Error;
 use std::fs::File;
-use std::io::{BufReader};
+use std::io::BufReader;
 use std::path::Path;
 
 #[derive(Deserialize, Debug)]
@@ -51,25 +50,22 @@ pub fn main() {
     .follow_links(true)
     .build()
     .unwrap()
-    .into_iter()
     .filter_map(Result::ok);
 
     for img in walker {
         let name = read_pkg_from_file(img.path());
-        match name {
-            Ok(n) => tx
-                .send(Arc::new(PkgItem {
-                    text: n,
-                    output: format!("{}", img.path().display()),
-                }))
-                .unwrap(),
-            Err(_) => {}
+        if let Ok(n) = name {
+            tx.send(Arc::new(PkgItem {
+                text: n,
+                output: format!("{}", img.path().display()),
+            }))
+            .unwrap()
         }
     }
 
     let selected_items = Skim::run_with(&options, Some(rx))
         .map(|out| out.selected_items)
-        .unwrap_or_else(|| Vec::new());
+        .unwrap_or_else(Vec::new);
 
     for item in selected_items.iter() {
         let path = format!("{}", item.output());
