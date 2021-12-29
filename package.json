@@ -1,0 +1,32 @@
+{
+  "name": "pd",
+  "version": "0.1.0",
+  "description": "search local package directly",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo test",
+    "prepare": "husky install"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/neo-hack/pd.git"
+  },
+  "keywords": [
+    "fuzzy",
+    "package"
+  ],
+  "author": {
+    "name": "JW"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/neo-hack/pd/issues"
+  },
+  "homepage": "https://github.com/neo-hack/pd#readme",
+  "devDependencies": {
+    "husky": "^7.0.0"
+  }
+}

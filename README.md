@@ -6,6 +6,12 @@
 
 </div>
 
+## install
+
+```console
+brew tap neo-hack/pd
+brew install pd
+```
 
 ## usage
 
