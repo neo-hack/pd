@@ -1,8 +1,8 @@
-extern crate dirs;
 extern crate globwalk;
 extern crate skim;
 use serde::Deserialize;
 use skim::prelude::*;
+use std::env;
 use std::error::Error;
 use std::fs::File;
 use std::io::BufReader;
@@ -43,7 +43,7 @@ pub fn main() {
     let (tx, rx): (SkimItemSender, SkimItemReceiver) = unbounded();
 
     let walker = globwalk::GlobWalkerBuilder::from_patterns(
-        dirs::home_dir().unwrap(),
+        env::current_dir().unwrap(),
         &["**/package.json", "!node_modules", "!.*"],
     )
     .max_depth(4)
