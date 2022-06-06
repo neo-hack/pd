@@ -9,7 +9,7 @@
 ## install
 
 ```console
-brew tap neo-hack/pd
+brew tap neo-hack/tap
 brew install pd
 ```
 
